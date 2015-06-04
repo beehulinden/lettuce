@@ -109,7 +109,7 @@ def enable(filename=None):
     @after.all
     def output_xml(total):
         root.setAttribute("tests", str(total.steps))
-        root.setAttribute("failures", str(total.steps_failed))
+        root.setAttribute("failures", str(total.steps_failed_counter))
         root.setAttribute("errors", '0')
         root.setAttribute("time", '0')
         doc.appendChild(root)

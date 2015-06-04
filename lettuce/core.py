@@ -1241,17 +1241,17 @@ class ScenarioResult(object):
 
         self.scenario = scenario
 
-        self.steps_passed = steps_passed
-        self.steps_failed = steps_failed
-        self.steps_skipped = steps_skipped
+        self.steps_passed_counter = len(steps_passed)
+        self.steps_failed_counter = len(steps_failed)
+        self.steps_skipped_counter = len(steps_skipped)
+        self.steps_undefined_counter = len(steps_undefined)
         self.steps_undefined = steps_undefined
 
-        all_lists = [steps_passed + steps_skipped + steps_undefined + steps_failed]
-        self.total_steps = sum(map(len, all_lists))
+        self.total_steps_counter = sum(map(len, [steps_passed + steps_skipped + steps_undefined + steps_failed]))
 
     @property
     def passed(self):
-        return self.total_steps is len(self.steps_passed)
+        return self.total_steps_counter == self.steps_passed_counter
 
 
 class TotalResult(object):
@@ -1259,10 +1259,11 @@ class TotalResult(object):
     def __init__(self, feature_results=None):
         self.feature_results = feature_results
         self.scenario_results = []
-        self.steps_passed = 0
-        self.steps_failed = 0
-        self.steps_skipped = 0
-        self.steps_undefined = 0
+        self.steps_passed_counter = 0
+        self.steps_failed_counter = 0
+        self.steps_skipped_counter = 0
+        self.steps_undefined_counter = 0
+        self.steps_undefined = []
         self._proposed_definitions = []
         self.steps = 0
         # store the scenario names that failed, with their location
@@ -1272,13 +1273,13 @@ class TotalResult(object):
         for feature_result in self.feature_results:
             for scenario_result in feature_result.scenario_results:
                 self.scenario_results.append(scenario_result)
-                self.steps_passed += len(scenario_result.steps_passed)
-                self.steps_failed += len(scenario_result.steps_failed)
-                self.steps_skipped += len(scenario_result.steps_skipped)
-                self.steps_undefined += len(scenario_result.steps_undefined)
-                self.steps += scenario_result.total_steps
+                self.steps_passed_counter += scenario_result.steps_passed_counter
+                self.steps_failed_counter += scenario_result.steps_failed_counter
+                self.steps_skipped_counter += scenario_result.steps_skipped_counter
+                self.steps_undefined_counter += scenario_result.steps_undefined_counter
+                self.steps += scenario_result.total_steps_counter
                 self._proposed_definitions.extend(scenario_result.steps_undefined)
-                if len(scenario_result.steps_failed) > 0:
+                if scenario_result.steps_failed_counter > 0:
                     self.failed_scenario_locations.append(scenario_result.scenario.represented())
 
     def _filter_proposed_definitions(self):
@@ -1298,7 +1299,7 @@ class TotalResult(object):
 
     @property
     def features_passed(self):
-        return len([result for result in self.feature_results if result.passed])
+        return self.steps_passed_counter
 
     @property
     def scenarios_ran(self):
@@ -1306,7 +1307,7 @@ class TotalResult(object):
 
     @property
     def scenarios_passed(self):
-        return len([result for result in self.scenario_results if result.passed])
+        return len([result for result in self.scenario_results if result.steps_failed_counter == 0])
 
 
 
@@ -1346,12 +1347,12 @@ class SummaryTotalResults(TotalResult):
             for feature_result in self.feature_results:
                 for scenario_result in feature_result.scenario_results:
                     self.scenario_results.append(scenario_result)
-                    self.steps_passed += len(scenario_result.steps_passed)
-                    self.steps_failed += len(scenario_result.steps_failed)
-                    self.steps_skipped += len(scenario_result.steps_skipped)
-                    self.steps_undefined += len(scenario_result.steps_undefined)
-                    self.steps += scenario_result.total_steps
+                    self.steps_passed_counter += scenario_result.steps_passed_counter
+                    self.steps_failed_counter += scenario_result.steps_failed_counter
+                    self.steps_skipped_counter += scenario_result.steps_skipped_counter
+                    self.steps_undefined_counter += scenario_result.steps_undefined_counter
+                    self.steps += scenario_result.total_steps_counter
                     self._proposed_definitions.extend(scenario_result.steps_undefined)
-                    if len(scenario_result.steps_failed) > 0:
+                    if scenario_result.steps_failed_counter > 0:
                         self.failed_scenario_locations.append(scenario_result.scenario.represented())
 

@@ -118,7 +118,7 @@ def main(args=sys.argv[1:]):
     )
 
     result = runner.run()
-    failed = result is None or result.steps != result.steps_passed
+    failed = result is None or result.steps != result.steps_passed_counter
     raise SystemExit(int(failed))
 
 if __name__ == '__main__':

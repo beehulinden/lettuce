@@ -244,12 +244,12 @@ def print_end(total=None):
     }
 
     for kind, color in kinds_and_colors.items():
-        attr = 'steps_%s' % kind
+        attr = 'steps_%s_counter' % kind
         stotal = getattr(total, attr)
         if stotal:
             steps_details.append("%s%d %s" % (color, stotal, kind))
 
-    steps_details.append("\033[1;32m%d passed\033[1;37m" % total.steps_passed)
+    steps_details.append("\033[1;32m%d passed\033[1;37m" % total.steps_passed_counter)
     word = total.steps > 1 and "steps" or "step"
     content = "\033[1;37m, ".join(steps_details)
 

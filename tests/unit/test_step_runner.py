@@ -154,11 +154,11 @@ def test_can_count_steps_and_its_states():
     feature_result = f.run()
 
     scenario_result = feature_result.scenario_results[0]
-    assert_equals(len(scenario_result.steps_passed), 1)
-    assert_equals(len(scenario_result.steps_failed), 1)
-    assert_equals(len(scenario_result.steps_undefined), 1)
-    assert_equals(len(scenario_result.steps_skipped), 1)
-    assert_equals(scenario_result.total_steps, 4)
+    assert_equals(scenario_result.steps_passed_counter, 1)
+    assert_equals(scenario_result.steps_failed_counter, 1)
+    assert_equals(scenario_result.steps_undefined_counter, 1)
+    assert_equals(scenario_result.steps_skipped_counter, 1)
+    assert_equals(scenario_result.total_steps_counter, 4)
 
 @with_setup(step_runner_environ)
 def test_can_point_undefined_steps():
@@ -167,8 +167,8 @@ def test_can_point_undefined_steps():
     f = Feature.from_string(FEATURE2)
     feature_result = f.run()
     scenario_result = feature_result.scenario_results[0]
-    assert_equals(len(scenario_result.steps_undefined), 2)
-    assert_equals(len(scenario_result.steps_passed), 1)
+    assert_equals(scenario_result.steps_undefined_counter, 2)
+    assert_equals(scenario_result.steps_passed_counter, 1)
     assert_equals(scenario_result.total_steps, 3)
 
     undefined1 = scenario_result.steps_undefined[0]
@@ -209,8 +209,8 @@ def test_ignore_case_on_step_definitions():
     f = Feature.from_string(FEATURE3)
     feature_result = f.run()
     scenario_result = feature_result.scenario_results[0]
-    assert_equals(len(scenario_result.steps_passed), 3)
-    assert_equals(scenario_result.total_steps, 3)
+    assert_equals(scenario_result.steps_passed_counter, 3)
+    assert_equals(scenario_result.total_steps_counter, 3)
     assert all([s.has_definition for s in scenario_result.scenario.steps])
 
 @with_setup(step_runner_environ)
@@ -220,8 +220,8 @@ def test_doesnt_ignore_case():
     f = Feature.from_string(FEATURE3)
     feature_result = f.run(ignore_case=False)
     scenario_result = feature_result.scenario_results[0]
-    assert_equals(len(scenario_result.steps_passed), 1)
-    assert_equals(len(scenario_result.steps_undefined), 2)
+    assert_equals(scenario_result.steps_passed_counter, 1)
+    assert_equals(scenario_result.steps_undefined, 2)
     assert_equals(scenario_result.total_steps, 3)
     assert not all([s.has_definition for s in scenario_result.scenario.steps])
 
@@ -252,8 +252,8 @@ def test_steps_that_match_groups_takes_them_as_parameters():
     f = Feature.from_string(FEATURE4)
     feature_result = f.run()
     scenario_result = feature_result.scenario_results[0]
-    assert_equals(len(scenario_result.steps_passed), 1)
-    assert_equals(scenario_result.total_steps, 1)
+    assert_equals(scenario_result.steps_passed_counter, 1)
+    assert_equals(scenario_result.total_steps_counter, 1)
 
 @with_setup(step_runner_environ)
 def test_steps_that_match_named_groups_takes_them_as_parameters():
@@ -266,8 +266,8 @@ def test_steps_that_match_named_groups_takes_them_as_parameters():
     f = Feature.from_string(FEATURE5)
     feature_result = f.run()
     scenario_result = feature_result.scenario_results[0]
-    assert_equals(len(scenario_result.steps_passed), 1)
-    assert_equals(scenario_result.total_steps, 1)
+    assert_equals(scenario_result.steps_passed_counter, 1)
+    assert_equals(scenario_result.total_steps_counter, 1)
 
 @with_setup(step_runner_environ)
 def test_steps_that_match_groups_and_named_groups_takes_just_named_as_params():
@@ -279,8 +279,8 @@ def test_steps_that_match_groups_and_named_groups_takes_just_named_as_params():
     f = Feature.from_string(FEATURE6)
     feature_result = f.run()
     scenario_result = feature_result.scenario_results[0]
-    assert_equals(len(scenario_result.steps_passed), 1)
-    assert_equals(scenario_result.total_steps, 1)
+    assert_equals(scenario_result.steps_passed_counter, 1)
+    assert_equals(scenario_result.total_steps_counter, 1)
 
 @with_setup(step_runner_environ)
 def test_step_definitions_takes_the_step_object_as_first_argument():
@@ -299,8 +299,8 @@ def test_step_definitions_takes_the_step_object_as_first_argument():
     f = Feature.from_string(FEATURE)
     feature_result = f.run()
     scenario_result = feature_result.scenario_results[0]
-    assert_equals(len(scenario_result.steps_passed), 1)
-    assert_equals(scenario_result.total_steps, 1)
+    assert_equals(scenario_result.steps_passed_counter, 1)
+    assert_equals(scenario_result.total_steps_counter, 1)
 
 @with_setup(step_runner_environ)
 def test_feature_can_run_only_specified_scenarios():
@@ -359,7 +359,7 @@ def test_count_raised_exceptions_as_failing_steps():
         f = Feature.from_string(FEATURE8)
         feature_result = f.run()
         scenario_result = feature_result.scenario_results[0]
-        assert_equals(len(scenario_result.steps_failed), 1)
+        assert_equals(scenario_result.steps_failed_counter, 1)
     finally:
         registry.clear()
 

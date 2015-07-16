@@ -130,13 +130,13 @@ def print_end(total=None):
         total.scenarios_passed))
 
     steps_details = []
-    for kind in ("failed","skipped",  "undefined"):
-        attr = 'steps_%s' % kind
+    for kind in ("failed", "skipped",  "undefined"):
+        attr = 'steps_%s_counter' % kind
         stotal = getattr(total, attr)
         if stotal:
             steps_details.append("%d %s" % (stotal, kind))
 
-    steps_details.append("%d passed" % total.steps_passed)
+    steps_details.append("%d passed" % total.steps_passed_counter)
     word = total.steps > 1 and "steps" or "step"
     wrt("%d %s (%s)\n" % (
         total.steps,
